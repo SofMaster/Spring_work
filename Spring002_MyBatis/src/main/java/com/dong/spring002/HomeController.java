@@ -1,39 +1,51 @@
 package com.dong.spring002;
 
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-/**
- * Handles requests for the application home page.
+
+/*
+ * 용어를 익혀요 MVC
+ * 
+ * 응답에 필요한 데이터 => Model
+ * 
+ * 응답을 하는 jsp 페이지 => View page
+ * 
+ * 요청을  제어(처리) 객체 => Controller
+ * 
  */
+
 @Controller
 public class HomeController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
+	// /home.do 요청에 대해 처리 메소드 .do는 생략 가능하다
+	@RequestMapping("/home") 
+	public String home(HttpServletRequest request) {
+		//DB 에서 읽어온 공지사항 이라고 가정하자
+		List<String> noticeList= new ArrayList<>();
+		noticeList.add("오늘부터 봄이 시작이라고 합니다.");
+		noticeList.add("우연히 우리도 Spring 을 배우기 시작 했네요^^");
+		noticeList.add("어쩌구...");
+		noticeList.add("저쩌구...");
 		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+		//공지 사항을 noticeList 라는 키값으로 request scope 에 담는다.
+		request.setAttribute("noticeList", noticeList);
 		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
+		// /WEB-INF/views/home.jsp 페이지로 forward 이동해서 응답
 		return "home";
 	}
-	
 }
+
+
+
+
+
+
+
+
+
